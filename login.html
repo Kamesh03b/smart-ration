@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Ration Shop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="login.js"></script>
+</head>
+<body class="bg-gradient-to-r from-indigo-500 to-blue-500 min-h-screen flex items-center justify-center font-sans">
+
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6">
+    <h1 class="text-2xl font-bold text-center text-blue-700">Ration Shop Portal</h1>
+    
+    <div id="quoteBox" class="text-center text-sm italic text-gray-600 mb-2"></div>
+
+    <!-- Toggle buttons -->
+    <div class="flex justify-center space-x-4">
+      <button onclick="showLogin('user')" class="px-4 py-1 rounded bg-blue-600 text-white" id="userBtn">User Login</button>
+      <button onclick="showLogin('admin')" class="px-4 py-1 rounded bg-gray-300 text-gray-800" id="adminBtn">Admin Login</button>
+    </div>
+
+    <!-- User Login Form -->
+    <div id="userLogin" class="space-y-4">
+      <input type="text" id="userId" placeholder="Aadhar or Ration Card Number" class="w-full border border-gray-300 p-2 rounded"/>
+      <input type="password" id="userOtp" placeholder="OTP" class="w-full border border-gray-300 p-2 rounded"/>
+      <button onclick="userLogin()" class="bg-blue-600 text-white w-full py-2 rounded">Login</button>
+    </div>
+
+    <!-- Admin Login Form -->
+    <div id="adminLogin" class="space-y-4 hidden">
+      <input type="text" id="adminMobile" placeholder="Mobile Number" class="w-full border border-gray-300 p-2 rounded"/>
+      <input type="password" id="adminOtp" placeholder="OTP" class="w-full border border-gray-300 p-2 rounded"/>
+      <button onclick="adminLogin()" class="bg-blue-600 text-white w-full py-2 rounded">Login</button>
+    </div>
+  </div>
+
+</body>
+</html>

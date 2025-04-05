@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Admin Dashboard</h1>
+    <button onclick="logout()" class="bg-red-600 px-4 py-1 rounded">Logout</button>
+  </nav>
+
+  <!-- Container -->
+  <div class="p-6 max-w-5xl mx-auto space-y-6">
+
+    <!-- Token Generator -->
+    <div class="bg-white p-4 shadow rounded">
+      <h2 class="text-lg font-bold mb-2">Token Generator</h2>
+      <button onclick="generateToken()" class="bg-green-600 text-white px-4 py-2 rounded">Generate Token</button>
+      <p id="tokenDisplay" class="mt-2 text-blue-700 font-semibold"></p>
+    </div>
+
+    <!-- Stock Management -->
+    <div class="bg-white p-4 shadow rounded">
+      <h2 class="text-lg font-bold mb-2">Stock Management</h2>
+      <form onsubmit="saveStock(event)" class="space-y-2">
+        <div class="grid grid-cols-3 gap-4">
+          <input type="number" placeholder="Rice (kg)" id="rice" class="border p-2 rounded" />
+          <input type="number" placeholder="Wheat (kg)" id="wheat" class="border p-2 rounded" />
+          <input type="number" placeholder="Pulses (kg)" id="pulses" class="border p-2 rounded" />
+          <input type="number" placeholder="Sugar (kg)" id="sugar" class="border p-2 rounded" />
+          <input type="number" placeholder="Cooking Oil (litres)" id="oil" class="border p-2 rounded" />
+          <input type="number" placeholder="Kerosene (litres)" id="kerosene" class="border p-2 rounded" />
+        </div>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded mt-4">Update Stock</button>
+      </form>
+      <div id="stockStatus" class="mt-4 text-green-700 font-semibold"></div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="bg-white p-4 shadow rounded">
+      <h2 class="text-lg font-bold mb-2">Ration Shop Map</h2>
+      <div class="border border-gray-300 h-64 flex items-center justify-center text-gray-500">
+        [Map Integration Placeholder]
+      </div>
+    </div>
+
+    <!-- Emergency Relief Section -->
+    <div id="emergencySection" class="bg-white p-4 shadow rounded hidden">
+      <h2 class="text-lg font-bold mb-2 text-red-600">Emergency Relief Section</h2>
+      <p class="text-gray-700">Relief supplies are currently being distributed due to emergency conditions.</p>
+    </div>
+
+  </div>
+
+  <script>
+    // Simulate login check
+    if (localStorage.getItem("loggedInAdmin") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInAdmin");
+      window.location.href = "login.html";
+    }
+
+    function generateToken() {
+      const token = Math.random().toString(36).substring(2, 8).toUpperCase();
+      document.getElementById("tokenDisplay").innerText = "Token: " + token;
+    }
+
+    function saveStock(e) {
+      e.preventDefault();
+      const stock = {
+        rice: document.getElementById("rice").value,
+        wheat: document.getElementById("wheat").value,
+        pulses: document.getElementById("pulses").value,
+        sugar: document.getElementById("sugar").value,
+        oil: document.getElementById("oil").value,
+        kerosene: document.getElementById("kerosene").value,
+      };
+      localStorage.setItem("rationStock", JSON.stringify(stock));
+      document.getElementById("stockStatus").innerText = "Stock updated successfully!";
+    }
+
+    // Enable emergency section manually if needed
+    const isEmergency = false; // change to true to show
+    if (isEmergency) {
+      document.getElementById("emergencySection").classList.remove("hidden");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-700 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Ration User Dashboard</h1>
+    <div>
+      <span id="userName" class="mr-4"></span>
+      <button onclick="logout()" class="bg-red-500 px-4 py-1 rounded">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="p-6 space-y-6 max-w-5xl mx-auto">
+
+    <!-- Profile -->
+    <div class="bg-white shadow-md p-4 rounded-xl">
+      <h2 class="text-lg font-semibold mb-2">👤 Profile Details</h2>
+      <p><strong>Name:</strong> Hemanathan</p>
+      <p><strong>Aadhar Number:</strong> 123456789</p>
+      <p><strong>Ration Card Type:</strong> BPL</p>
+      <p><strong>Family Members:</strong> 4</p>
+    </div>
+
+    <!-- Monthly Quota -->
+    <div class="bg-white shadow-md p-4 rounded-xl">
+      <h2 class="text-lg font-semibold mb-2">📦 Monthly Ration Entitlement</h2>
+      <ul class="list-disc list-inside">
+        <li>Rice: 10kg</li>
+        <li>Wheat: 5kg</li>
+        <li>Sugar: 2kg</li>
+        <li>Oil: 1L</li>
+      </ul>
+    </div>
+
+    <!-- Ration Shop Stock -->
+    <div class="bg-white shadow-md p-4 rounded-xl">
+      <h2 class="text-lg font-semibold mb-2">🏪 Ration Shop Stock</h2>
+      <ul class="list-disc list-inside">
+        <li>Rice: Available</li>
+        <li>Wheat: Available</li>
+        <li>Pulses: Low</li>
+        <li>Sugar: Available</li>
+        <li>Cooking Oil: Available</li>
+        <li>Kerosene: Out of Stock</li>
+      </ul>
+    </div>
+
+    <!-- Token Generator -->
+    <div class="bg-white shadow-md p-4 rounded-xl">
+      <h2 class="text-lg font-semibold mb-2">🎫 Generate Token</h2>
+      <button onclick="generateToken()" class="bg-green-600 text-white px-4 py-2 rounded">Generate</button>
+      <p id="tokenDisplay" class="mt-2 text-blue-700 font-bold"></p>
+    </div>
+
+    <!-- Map -->
+    <div class="bg-white shadow-md p-4 rounded-xl">
+      <h2 class="text-lg font-semibold mb-2">🗺️ Nearest Ration Shop</h2>
+      <iframe src="https://www.google.com/maps?q=chennai+ration+shop&output=embed" width="100%" height="250" style="border:0;" allowfullscreen loading="lazy"></iframe>
+    </div>
+
+    <!-- Ration Booking -->
+    <div class="bg-white shadow-md p-4 rounded-xl">
+      <h2 class="text-lg font-semibold mb-2">🛒 Book Your Ration</h2>
+      <form onsubmit="bookRation(event)">
+        <label class="block mb-1">Select Item:</label>
+        <select id="item" class="w-full border p-2 mb-2 rounded">
+          <option value="Rice">Rice</option>
+          <option value="Wheat">Wheat</option>
+          <option value="Sugar">Sugar</option>
+          <option value="Pulses">Pulses</option>
+          <option value="Cooking Oil">Cooking Oil</option>
+          <option value="Kerosene">Kerosene</option>
+        </select>
+        <input id="quantity" type="number" placeholder="Quantity" class="w-full border p-2 mb-2 rounded" required />
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">Book Now</button>
+      </form>
+    </div>
+
+    <!-- Transactions -->
+    <div class="bg-white shadow-md p-4 rounded-xl">
+      <h2 class="text-lg font-semibold mb-2">📜 Transaction History</h2>
+      <ul id="transactionList" class="list-disc list-inside"></ul>
+    </div>
+
+  </div>
+
+  <script>
+    if (localStorage.getItem("loggedInUser") !== "Hemanathan") {
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("userName").innerText = "Welcome, " + localStorage.getItem("loggedInUser");
+
+    function bookRation(e) {
+      e.preventDefault();
+      const item = document.getElementById("item").value;
+      const qty = document.getElementById("quantity").value;
+      const user = localStorage.getItem("loggedInUser");
+      const transaction = { user, item, qty, date: new Date().toLocaleDateString() };
+
+      const existing = JSON.parse(localStorage.getItem("transactions") || "[]");
+      existing.push(transaction);
+      localStorage.setItem("transactions", JSON.stringify(existing));
+
+      alert("Ration booked successfully!");
+      loadTransactions();
+    }
+
+    function loadTransactions() {
+      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+      const list = document.getElementById("transactionList");
+      list.innerHTML = "";
+      transactions.forEach(t => {
+        if (t.user === localStorage.getItem("loggedInUser")) {
+          const li = document.createElement("li");
+          li.textContent = `${t.item} - ${t.qty} units on ${t.date}`;
+          list.appendChild(li);
+        }
+      });
+    }
+
+    function generateToken() {
+      const token = Math.floor(100000 + Math.random() * 900000);
+      document.getElementById("tokenDisplay").innerText = "Your Token: " + token;
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "login.html";
+    }
+
+    loadTransactions();
+  </script>
+</body>
+</html>
